@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wallet</title>
+  <link rel="stylesheet" href="wallet.css" />
+  
+ 
+</head>
+
+<body>
+  <nav>
+    <img src="images/logo.png" class="logo" />
+    <h1>Fiction <span class="name">Digitals</span></h1>
+    <div class="menu-toggle" id="menu-toggle">☰</div>
+    <ul id="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="Market.html">Market</a></li>
+      <li><a class="active" href="wallet.html">Wallet</a></li>
+      <li><a href="About.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <header>
+      <h1>My Crypto Wallet</h1>
+      <p>Secure | Fast | Reliable</p>
+    </header>
+
+    <div class="wallet">
+      <div class="balance">
+        Wallet Balance in Bitcoin: <strong id="wallet-balance">571</strong>
+      </div>
+
+      <div class="transaction-history">
+        <h3>Transaction History</h3>
+        <ul id="transactions">
+          <li>-0.3 BTC to Muayesh</li>
+          <li>+0.5 BTC from Ghaffar</li>
+          <li>+1.2 BTC from Amir</li>
+          <li>-4.7 BTC to Sufyan</li>
+        </ul>
+      </div>
+
+      <div class="transaction-form">
+        <h3>Send Crypto</h3>
+        <input type="text" id="toAddress" placeholder="Recipient Address" />
+        <input type="number" id="amount" placeholder="Amount (BTC)" />
+        <button onclick="sendCrypto()">Send</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="images/logo.png" alt="Logo" />
+        <h2>Fiction <span class="name">Digitals</span></h2>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="Market.html">Market</a>
+        <a href="wallet.html">Wallet</a>
+        <a href="About.html">About Us</a>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Fiction Digitals. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const navMenu = document.getElementById("nav-menu");
+
+
+    menuToggle.addEventListener("click", () => {
+      navMenu.classList.toggle("show");
+    });
+
+function sendCrypto() {
+  const address = document.getElementById('toAddress').value;
+  const amount = parseFloat(document.getElementById('amount').value);
+  const transactions = document.getElementById('transactions');
+  const walletBalance = document.getElementById("wallet-balance");
+  const balance = parseFloat(walletBalance.innerHTML);
+
+  const now = new Date();
+  const dateTime = now.toLocaleString();
+
+  if (!address || amount <= 0 || isNaN(amount)) {
+    alert("Please enter valid address and amount.");
+    return;
+  }
+
+  const li = document.createElement('li');
+  li.style.position = 'relative';
+  li.style.paddingRight = '150px';
+
+  const dateSpan = document.createElement('span');
+  dateSpan.textContent = dateTime;
+  dateSpan.style.position = 'absolute';
+  dateSpan.style.right = '10px';
+  dateSpan.style.color = 'red';
+  dateSpan.style.fontSize = '0.8em';
+
+  // Check for limits and balance before proceeding
+  if (amount > 571) {
+    li.textContent = `❌ Failed: Amount exceeds limit (${amount} BTC to ${address})`;
+    li.appendChild(dateSpan);
+    alert("Transaction failed: Amount exceeds limit (571 BTC).");
+  } else if (balance < amount) {
+    li.textContent = `❌ Failed: Insufficient balance (${amount} BTC to ${address})`;
+    li.appendChild(dateSpan);
+    alert("You do not have enough balance.");
+  } else {
+    // Transaction successful
+    li.textContent = `✅ -${amount} BTC to ${address}`;
+    li.appendChild(dateSpan);
+    walletBalance.innerHTML = (balance - amount).toFixed(3);
+    alert(`Sent ${amount} BTC to ${address}`);
+    document.getElementById('toAddress').value = '';
+    document.getElementById('amount').value = '';
+  }
+
+  transactions.insertBefore(li, transactions.firstChild);
+  if (transactions.children.length > 5) {
+    transactions.lastElementChild.remove();
+  }
+}
+
+
+
+    
+  </script>
+</body>
+
+</html>
